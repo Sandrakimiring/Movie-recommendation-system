@@ -87,3 +87,73 @@ target/
 
 # Mypy cache
 .mypy_cache/
+
+venv/
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+venv/
+.venv/
+pip-log.txt
+pip-delete-this-directory.txt
+.tox/
+.coverage
+.coverage.*
+.cache
+nosetests.xml
+coverage.xml
+*.cover
+*.log
+.mypy_cache/
+.dmypy.json
+.pytest_cache/
+.pypirc
+
+# Virtual Environment
+venv/
+env/
+ENV/
+env.bak/
+venv.bak/
+
+# Jupyter
+.ipynb_checkpoints
+*/.ipynb_checkpoints/*
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Modal
+.modal/
+modal.toml
+
+# MLflow
+mlruns/
+
+# Data (large files)
+data/raw/
+data/processed/
+data/interim/
+
+# Models
+models/
+*.pkl
+*.pt
+*.h5
+*.joblib
+
+# Logs
+logs/
+*.log
