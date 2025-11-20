@@ -1,194 +1,84 @@
-# Byte-compiled / optimized / DLL files
-__pycache__/
-*.py[cod]
-
-# C extensions
-*.so
-
-# Distribution / packaging
-.Python
-env/
-build/
-develop-eggs/
-dist/
-downloads/
-eggs/
-.eggs/
-lib/
-lib64/
-parts/
-sdist/
-var/
-*.egg-info/
-.installed.cfg
-*.egg
-
-# PyInstaller
-#  Usually these files are written by a python script from a template
-#  before PyInstaller builds the exe, so as to inject date/other infos into it.
-*.manifest
-*.spec
-
-# Installer logs
-pip-log.txt
-pip-delete-this-directory.txt
-
-# Unit test / coverage reports
-htmlcov/
-.tox/
-.coverage
-.coverage.*
-.cache
-nosetests.xml
-coverage.xml
-*.cover
-
-# Translations
-*.mo
-*.pot
-
-# Django stuff:
-*.log
-
-# Sphinx documentation
-docs/_build/
-
-# PyBuilder
-target/
-
-# DotEnv configuration
-.env
-
-# Database
-*.db
-*.rdb
-
-# Pycharm
-.idea
-
-# VS Code
-.vscode/
-
-# Spyder
-.spyproject/
-
-# Jupyter NB Checkpoints
-.ipynb_checkpoints/
-
-# exclude data from source control by default
-/data/
-
-# Mac OS-specific storage files
-.DS_Store
-
-# vim
-*.swp
-*.swo
-
-# Mypy cache
-.mypy_cache/
-
-venv/
-
+# =====================
 # Python
+# =====================
+*.pyc
+*.pyo
+*.pyd
 __pycache__/
-*.py[cod]
-*$py.class
-*.so
-.Python
-env/
-venv/
-.venv/
-pip-log.txt
-pip-delete-this-directory.txt
-.tox/
-.coverage
-.coverage.*
-.cache
-nosetests.xml
-coverage.xml
-*.cover
-*.log
-.mypy_cache/
-.dmypy.json
-.pytest_cache/
-.pypirc
+*.env
+*.egg-info/
+dist/
+build/
 
-# Virtual Environment
+# =====================
+# Jupyter Notebook
+# =====================
+.ipynb_checkpoints
+
+# =====================
+# Virtual Environments
+# =====================
 venv/
 env/
 ENV/
-env.bak/
-venv.bak/
+.venv/
 
-# Jupyter
-.ipynb_checkpoints
-*/.ipynb_checkpoints/*
-
-# IDE
+# =====================
+# IDEs and Editors
+# =====================
 .vscode/
 .idea/
-*.swp
-*.swo
+*.sublime-project
+*.sublime-workspace
 
-# OS
+# =====================
+# Operating System
+# =====================
 .DS_Store
 Thumbs.db
 
-# Modal
-.modal/
-modal.toml
-
-# MLflow
-mlruns/
-
-# Data (large files)
-data/raw/
-data/processed/
-data/interim/
-
-# Models
-models/
+# =====================
+# Git LFS / Large Files
+# =====================
 *.pkl
-*.pt
-*.h5
 *.joblib
+*.h5
+*.ckpt
 
-# Logs
-logs/
+# =====================
+# Logs / Temp Files
+# =====================
 *.log
+*.tmp
+*.bak
 
-# Ignore requirements files used for development
-dev-requirements.txt
-test-requirements.txt
-docs-requirements.txt
-ci-requirements.txt
-# local requirements file
-local-requirements.txt
-# Ignore environment files
-.env
-.venv/
-env/
-venv/
-ENV/
-env.bak/
-venv.bak/
-# Ignore Jupyter Notebook checkpoints
-.ipynb_checkpoints
-*/.ipynb_checkpoints/*  
-# Ignore IDE specific files
-.vscode/
-.idea/
-*.swp
-*.swo   
-# Ignore OS specific files
-.DS_Store
-Thumbs.db
-# Ignore Modal files
-.modal/
-modal.toml
-# Ignore MLflow files
+# =====================
+# Batch / Script Files (optional, only if problematic)
+# =====================
+# *.bat
+
+# =====================
+# Data Files
+# =====================
+data/external/*
+data/interim/*
+data/processed/*
+# Keep only .gitkeep files
+!data/external/.gitkeep
+!data/interim/.gitkeep
+!data/processed/.gitkeep
+data/raw/*
+
+# =====================
+# Misc
+# =====================
+__pycache__/
+
 mlruns/
+*.pt
 
+*.pth
 
-
+data/external/*
+data/interim/*
+data/raw/*
