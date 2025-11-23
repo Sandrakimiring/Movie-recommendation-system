@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Movie Recommender</title>
+  <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+  <h1>🎬 Movie Recommendation System</h1>
+
+  <div class="section">
+    <h2>Collaborative Filtering</h2>
+    <input type="number" id="cf-user-id" placeholder="Enter User ID">
+    <button onclick="getCF()">Get Recommendations</button>
+    <div id="cf-results" class="results"></div>
+  </div>
+
+  <div class="section">
+    <h2>Content-Based</h2>
+    <input type="text" id="cb-movie-title" placeholder="Enter Movie Title">
+    <button onclick="getCB()">Get Recommendations</button>
+    <div id="cb-results" class="results"></div>
+  </div>
+
+  <script src="/static/script.js"></script>
+</body>
+</html>

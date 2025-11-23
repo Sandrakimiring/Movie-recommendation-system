@@ -7,22 +7,21 @@ import numpy as np
 import pandas as pd
 from sklearn.metrics.pairwise import cosine_similarity
 from difflib import get_close_matches
+from fastapi.staticfiles import StaticFiles
+from fastapi.responses import FileResponse
 
-# ----------------------------
-# Paths
-# ----------------------------
+
 BASE_DIR = Path(__file__).resolve().parents[2]  
 DATA_DIR = BASE_DIR / "data"
 MOVIES_CANDIDATES = [DATA_DIR / "processed" / "movies.csv", DATA_DIR / "movies.csv"]
 MODEL_DIR = BASE_DIR / "models"
 LOGS_DIR = BASE_DIR / "logs"
+FRONTEND_DIR = BASE_DIR / "src" / "frontend"
 
 for d in (LOGS_DIR, MODEL_DIR, DATA_DIR):
     d.mkdir(parents=True, exist_ok=True)
 
-# ----------------------------
-# Logging
-# ----------------------------
+
 logging.basicConfig(
     filename=LOGS_DIR / "api.log",
     level=logging.INFO,
@@ -31,18 +30,18 @@ logging.basicConfig(
 logger = logging.getLogger("movie_recs_api")
 logger.addHandler(logging.StreamHandler())  # also log to console
 
-# ----------------------------
-# FastAPI app
-# ----------------------------
 app = FastAPI(
     title="Movie Recommendation API",
     description="Async API for Collaborative Filtering (embeddings) and Content-Based (TF-IDF) recommendations",
     version="1.0",
 )
+app.mount("/static", StaticFiles(directory=str(FRONTEND_DIR)), name="static")
 
-# ----------------------------
-# Helper loaders & converters
-# ----------------------------
+
+@app.get("/", response_class=FileResponse)
+async def serve_frontend():
+    return FRONTEND_DIR / "index.html"
+
 def safe_joblib_load(path: Path):
     try:
         obj = joblib.load(path)
@@ -126,9 +125,7 @@ if movie_emb_dict is not None and movie2idx is not None:
             idx2movie[idx] = raw_mid
         logger.info(f"movie_embeddings matrix shape: {movie_embeddings.shape}")
 
-# ----------------------------
-# Load TF-IDF artifacts
-# ----------------------------
+
 tfidf_vectorizer = safe_joblib_load(MODEL_DIR / "tfidf_vectorizer.pkl")
 tfidf_matrix = safe_joblib_load(MODEL_DIR / "tfidf_similarity_matrix.pkl")  # your name
 
@@ -137,9 +134,6 @@ if tfidf_matrix is not None:
     tfidf_matrix = np.asarray(tfidf_matrix)
     logger.info(f"TF-IDF matrix shape: {tfidf_matrix.shape}")
 
-# ----------------------------
-# Utilities
-# ----------------------------
 def find_movie_by_title(query_title: str, cutoff: float = 0.6) -> Optional[str]:
     """Return the exact title found in movies_df (normalized) or the closest match."""
     q = query_title.strip().lower()
@@ -152,9 +146,7 @@ def find_movie_by_title(query_title: str, cutoff: float = 0.6) -> Optional[str]:
         return movies_df.loc[movies_df["title_norm"] == matches[0], "title"].iloc[0]
     return None
 
-# ----------------------------
-# API endpoints
-# ----------------------------
+
 @app.get("/")
 async def root():
     return {
@@ -166,7 +158,7 @@ async def root():
         },
     }
 
-# -------- Collaborative Filtering endpoint --------
+#Collaborative Filtering endpoint 
 @app.get("/recommend/{user_id}")
 async def recommend_cf(user_id: int, top_n: int = 10):
 
@@ -199,7 +191,7 @@ async def recommend_cf(user_id: int, top_n: int = 10):
     return {"user_id": int(user_id), "recommendations": recommended_movies}
 
 
-# -------- Content-Based endpoint --------
+# Content-Based endpoint 
 @app.get("/recommend/content/")
 async def recommend_content(
     movie_id: Optional[int] = Query(None, description="movieId (int)"),
