@@ -35,12 +35,13 @@ app = FastAPI(
     description="Async API for Collaborative Filtering (embeddings) and Content-Based (TF-IDF) recommendations",
     version="1.0",
 )
-app.mount("/static", StaticFiles(directory=str(FRONTEND_DIR)), name="static")
+
+# app.mount("/static", StaticFiles(directory=str(FRONTEND_DIR)), name="static")
 
 
-@app.get("/", response_class=FileResponse)
-async def serve_frontend():
-    return FRONTEND_DIR / "index.html"
+# @app.get("/", response_class=FileResponse)
+# async def serve_frontend():
+#     return FRONTEND_DIR / "index.html"
 
 def safe_joblib_load(path: Path):
     try:

@@ -15,15 +15,21 @@ async function getCF() {
 }
 
 async function getCB() {
-    const title = document.getElementById("cb-movie-title").value;
-    const res = await fetch(`${API_BASE}/recommend/content/?title=${encodeURIComponent(title)}`);
-    const data = await res.json();
-    const container = document.getElementById("cb-results");
-    container.innerHTML = "";
+  const title = document.getElementById("cb-movie-title").value;
+  const res = await fetch(`${API_BASE}/recommend/content/?title=${encodeURIComponent(title)}`);
+  const data = await res.json();
+  console.log(data); // <-- add this to see what you get
+  const container = document.getElementById("cb-results");
+  container.innerHTML = "";
+  if (data.recommendations) {
     data.recommendations.forEach(m => {
-        const card = document.createElement("div");
-        card.className = "movie-card";
-        card.innerHTML = `<div>${m.title}</div><div class="score">Score: ${m.score.toFixed(2)}</div>`;
-        container.appendChild(card);
+      const card = document.createElement("div");
+      card.className = "movie-card";
+      card.innerHTML = `
+        <div>${m.title}</div>
+        <div class="score">Score: ${m.score.toFixed(2)}</div>
+      `;
+      container.appendChild(card);
     });
+  }
 }
