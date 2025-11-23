@@ -1,5 +1,6 @@
 import logging
 from pathlib import Path
+import re
 import joblib
 import pandas as pd
 import numpy as np
@@ -46,6 +47,11 @@ def train_tfidf_model():
     else:
         movies_df["text"] = movies_df[text_column].fillna('')
 
+    def clean_text(text):
+        return re.sub(r'\s*\(\d{4}\)|\s*\d{4}', '', str(text))
+
+    movies_df["text"] = movies_df["text"].apply(clean_text)
+    logger.info("Cleaned dates from text data to prevent year-bias.")
     
     logger.info("Training TF-IDF model...")
     tfidf = TfidfVectorizer(stop_words='english')

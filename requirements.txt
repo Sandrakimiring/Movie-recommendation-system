@@ -27,3 +27,10 @@ flask
 # experiment tracking
 mlflow
 python-dotenv
+uvicorn[standard]
+fastapi
+python-multipart
+aiofiles
+starlette
+requests
+jinja2

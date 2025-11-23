@@ -49,12 +49,15 @@ def load_model_and_data():
 
 def get_recommendations(title, tfidf_model, tfidf_matrix, movies_df, top_n=10):
     """Return top-N content-based recommendations for a given movie title."""
+
     if title not in movies_df["title"].values:
         logging.warning(f"Movie '{title}' not found in dataset.")
         return []
 
     idx = movies_df.index[movies_df["title"] == title][0]
-    cosine_similarities = cosine_similarity(tfidf_matrix[idx], tfidf_matrix).flatten()
+
+    # Directly use similarity row (no need to recompute)
+    cosine_similarities = tfidf_matrix[idx]
 
     similar_indices = cosine_similarities.argsort()[-(top_n + 1):][::-1]
     similar_scores = cosine_similarities[similar_indices]
@@ -69,18 +72,19 @@ def get_recommendations(title, tfidf_model, tfidf_matrix, movies_df, top_n=10):
     return recommendations
 
 
+
 if __name__ == "__main__":
     logging.info("Starting TF-IDF prediction...")
     tfidf_model, tfidf_matrix, movies_df = load_model_and_data()
-    
+
+    user_input = input("Enter a movie title: ")
+
     movie_title = find_movie(user_input, movies_df)
     if movie_title:
         recommendations = get_recommendations(movie_title, tfidf_model, tfidf_matrix, movies_df)
         for rec_title, score in recommendations:
             print(f"{rec_title} (Similarity: {score})")
-    
     else:
-        logging.warning(f"No close match found for movie title '{user_input}'.")    
-
+        logging.warning(f"No close match found for movie title '{user_input}'.")
 
     logging.info("Prediction completed successfully.")
