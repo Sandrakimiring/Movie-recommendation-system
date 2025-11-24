@@ -1,31 +1,9 @@
-# local package
--e .
-
-# data + ML frameworks
-pandas
-numpy
-matplotlib
-scikit-learn
-seaborn
-jupyterlab
-pathlib2
-joblib
-
-# collaborative filtering / recommendation
-# scikit-surprise
-# conda install -c conda-forge scikit-surprise- for surprise package if pip has an issue
-# deep learning / NLP
-
-nltk
-transformers
-
-# visualization / web
-streamlit
-plotly
-flask
-
-# experiment tracking
-mlflow
-python-dotenv
-uvicorn[standard]
 fastapi
+uvicorn
+numpy
+pandas
+scikit-learn
+scipy
+joblib
+jinja2
+python-dotenv
