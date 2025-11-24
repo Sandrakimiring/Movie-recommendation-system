@@ -15,7 +15,7 @@ joblib
 # scikit-surprise
 # conda install -c conda-forge scikit-surprise- for surprise package if pip has an issue
 # deep learning / NLP
-torch
+
 nltk
 transformers
 
@@ -29,8 +29,3 @@ mlflow
 python-dotenv
 uvicorn[standard]
 fastapi
-python-multipart
-aiofiles
-starlette
-requests
-jinja2
