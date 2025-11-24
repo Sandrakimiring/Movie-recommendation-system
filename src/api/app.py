@@ -7,8 +7,6 @@ import numpy as np
 import pandas as pd
 from sklearn.metrics.pairwise import cosine_similarity
 from difflib import get_close_matches
-from fastapi.staticfiles import StaticFiles
-from fastapi.responses import FileResponse
 
 
 BASE_DIR = Path(__file__).resolve().parents[2]  
@@ -52,7 +50,6 @@ def safe_joblib_load(path: Path):
         logger.warning(f"Failed to load {path}: {e}")
         return None
 
-# Try to find movies.csv
 movies_path = None
 for p in MOVIES_CANDIDATES:
     if p.exists():
@@ -64,26 +61,20 @@ if movies_path is None:
     movies_df = pd.DataFrame(columns=["movieId", "title", "genres"])
 else:
     movies_df = pd.read_csv(movies_path)
-    # normalize title for fuzzy matching & simple exact matching
     movies_df["title_norm"] = movies_df["title"].astype(str).str.strip().str.lower()
     logger.info(f"Loaded movies metadata: {movies_path} ({len(movies_df)} rows)")
 
-# ----------------------------
-# Load CF artifacts (embeddings + mappings)
-# ----------------------------
 user_emb_dict = safe_joblib_load(MODEL_DIR / "user_embeddings.pkl")
 movie_emb_dict = safe_joblib_load(MODEL_DIR / "movie_embeddings.pkl")
 user2idx = safe_joblib_load(MODEL_DIR / "user2idx.pkl")
 movie2idx = safe_joblib_load(MODEL_DIR / "movie2idx.pkl")
 
-# Convert dict-of-vectors + mapping -> numpy matrices aligned by idx
 user_embeddings = None
 movie_embeddings = None
 idx2user = {}
 idx2movie = {}
 
 if user_emb_dict is not None and user2idx is not None:
-    # allocate array of size = max index+1
     max_user_idx = max(user2idx.values())
     emb_dim = None
     for uid, vec in user_emb_dict.items():
@@ -96,7 +87,6 @@ if user_emb_dict is not None and user2idx is not None:
         for raw_uid, idx in user2idx.items():
             vec = user_emb_dict.get(raw_uid)
             if vec is None:
-                # try as string
                 vec = user_emb_dict.get(str(raw_uid))
             if vec is None:
                 logger.debug(f"No vector found for user id {raw_uid}; leaving zeros")
@@ -131,7 +121,6 @@ tfidf_vectorizer = safe_joblib_load(MODEL_DIR / "tfidf_vectorizer.pkl")
 tfidf_matrix = safe_joblib_load(MODEL_DIR / "tfidf_similarity_matrix.pkl")  # your name
 
 if tfidf_matrix is not None:
-    # ensure it's 2D
     tfidf_matrix = np.asarray(tfidf_matrix)
     logger.info(f"TF-IDF matrix shape: {tfidf_matrix.shape}")
 
@@ -140,7 +129,7 @@ def find_movie_by_title(query_title: str, cutoff: float = 0.6) -> Optional[str]:
     q = query_title.strip().lower()
     if q in set(movies_df["title_norm"].values):
         return movies_df.loc[movies_df["title_norm"] == q, "title"].iloc[0]
-    # fuzzy match
+  
     choices = movies_df["title_norm"].tolist()
     matches = get_close_matches(q, choices, n=1, cutoff=cutoff)
     if matches:
@@ -163,21 +152,16 @@ async def root():
 @app.get("/recommend/{user_id}")
 async def recommend_cf(user_id: int, top_n: int = 10):
 
-    # 1. Check if user exists
     user_idx = user2idx.get(user_id)
     if user_idx is None:
         raise HTTPException(status_code=404, detail="User ID not found")
 
-    # 2. Get user embedding
     user_vec = user_embeddings[user_idx]
 
-    # 3. Compute scores
     scores = np.dot(movie_embeddings, user_vec)
 
-    # 4. Get top N
     top_indices = np.argsort(scores)[-top_n:][::-1]
 
-    # 5. Convert NumPy ints → Python ints
     recommended_movies = []
     for idx in top_indices:
         movie_id = int(list(movie2idx.keys())[list(movie2idx.values()).index(idx)])
@@ -209,7 +193,6 @@ async def recommend_content(
     if movie_id is None and title is None:
         raise HTTPException(status_code=400, detail="Provide either movie_id or title.")
 
-    # determine row index in movies_df
     if movie_id is not None:
         if movie_id not in movies_df["movieId"].values:
             raise HTTPException(status_code=404, detail=f"Movie ID {movie_id} not found.")
@@ -220,10 +203,8 @@ async def recommend_content(
             raise HTTPException(status_code=404, detail=f"Title '{title}' not found (no close match).")
         idx = int(movies_df.index[movies_df["title"] == found_title][0])
 
-    # compute similarities
     sims = cosine_similarity(tfidf_matrix[idx:idx+1], tfidf_matrix).flatten()
-    top_idx = sims.argsort()[-(top_n + 1):][::-1]  # include the movie itself
-    # exclude the query movie itself
+    top_idx = sims.argsort()[-(top_n + 1):][::-1]  
     top_idx = [i for i in top_idx if i != idx][:top_n]
 
     recs = []
@@ -237,12 +218,6 @@ async def recommend_content(
     return {"query_index": int(idx), "recommendations": recs}
 
 
-
-
-
-# ----------------------------
-# Run for debug (optional)
-# ----------------------------
 if __name__ == "__main__":
     import uvicorn
     uvicorn.run("src.api.app:app", host="0.0.0.0", port=8000, reload=True)

@@ -56,7 +56,7 @@ def get_recommendations(title, tfidf_model, tfidf_matrix, movies_df, top_n=10):
 
     idx = movies_df.index[movies_df["title"] == title][0]
 
-    # Directly use similarity row (no need to recompute)
+    # Directly use similarity row 
     cosine_similarities = tfidf_matrix[idx]
 
     similar_indices = cosine_similarities.argsort()[-(top_n + 1):][::-1]

@@ -101,7 +101,7 @@ def evaluate_models():
         true_r = user_ratings['rating'].values
         movie_ids = user_ratings['movieId'].values
 
-        # ---- SVD ----
+        #  SVD
         svd_preds = [svd.predict(user, mid).est for mid in movie_ids]
         svd_preds = np.array(svd_preds)
         svd_rmse_list.append(np.sqrt(np.mean((svd_preds - true_r)**2)))
@@ -111,7 +111,7 @@ def evaluate_models():
         svd_rec_list.append(r)
         svd_ndcg_list.append(ndcg_at_k(true_r, svd_preds))
 
-        # ---- Neural CF ----
+        # Neural CF 
         ncf_preds = []
         for mid in movie_ids:
             if user not in user2idx or mid not in movie2idx:
