@@ -63,6 +63,7 @@ def train_tfidf_model():
 
     logger.info("Saving TF-IDF model and cosine similarity matrix...")
     joblib.dump(tfidf, MODEL_DIR / "tfidf_vectorizer.pkl")
+    joblib.dump(tfidf_matrix, MODEL_DIR / "tfidf_matrix.pkl")
     joblib.dump(cosine_sim, MODEL_DIR / "tfidf_similarity_matrix.pkl")
     logger.info("TF-IDF model and similarity matrix saved successfully.")
 

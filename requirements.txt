@@ -7,3 +7,8 @@ scipy
 joblib
 jinja2
 python-dotenv
+scikit-surprise
+python-multipart
+requests
+pytest
+httpx

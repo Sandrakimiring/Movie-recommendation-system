@@ -52,6 +52,58 @@ Project Organization
     └── tox.ini            <- tox file with settings for running tox; see tox.readthedocs.io
 
 
+## How to Run
+
+### Prerequisites
+- Python 3.9+
+- Docker (optional)
+
+### Local Setup (Windows)
+1. **Install Dependencies**:
+   ```bash
+   pip install -r requirements.txt
+   ```
+2. **Run the Application**:
+   Double-click `run.bat` or run in terminal:
+   ```cmd
+   run.bat
+   ```
+   This script will:
+   - Train the models (if needed).
+   - Start the API server.
+
+3. **Access the API**:
+   Open your browser to [http://localhost:8000/docs](http://localhost:8000/docs) to see the interactive API documentation.
+
+### Docker Setup
+1. **Build the Image**:
+   ```bash
+   docker build -t movie-recs .
+   ```
+2. **Run the Container**:
+   ```bash
+   docker run -p 8000:8000 movie-recs
+   ```
+
+## Key Files Explained
+
+- **`main.py`**: The entry point of the application. It starts the Uvicorn server which hosts the FastAPI app.
+- **`src/api/app.py`**: The core API logic. It defines the endpoints (`/recommend/...`), loads the trained models, and handles user requests.
+- **`src/models/train_model.py`**: The master training script. It orchestrates the training of:
+    - **Collaborative Filtering**: SVD model (users similar to you).
+    - **Content-Based**: TF-IDF model (movies similar to this movie).
+    - **Hybrid**: User Profiles (your taste based on movie content).
+- **`src/models/hybrid/train_hybrid.py`**: Logic for generating User Content Profiles for the hybrid model.
+- **`Dockerfile`**: Configuration for packaging the app into a container.
+- **`run.bat`**: A helper script for Windows users to easily train and run the app.
+
+## API Endpoints
+
+- **`GET /`**: Health check and model status.
+- **`GET /recommend/{user_id}`**: Get recommendations based on Collaborative Filtering (what similar users liked).
+- **`GET /recommend/content/?title=...`**: Get recommendations based on Content-Based Filtering (movies similar to the query).
+- **`GET /recommend/hybrid/{user_id}`**: Get recommendations using a weighted hybrid approach (combining user taste and similar users).
+
 --------
 
 <p><small>Project based on the <a target="_blank" href="https://drivendata.github.io/cookiecutter-data-science/">cookiecutter data science project template</a>. #cookiecutterdatascience</small></p>

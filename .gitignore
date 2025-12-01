@@ -57,17 +57,6 @@ Thumbs.db
 # =====================
 # *.bat
 
-# =====================
-# Data Files
-# =====================
-data/external/*
-data/interim/*
-data/processed/*
-# Keep only .gitkeep files
-!data/external/.gitkeep
-!data/interim/.gitkeep
-!data/processed/.gitkeep
-data/raw/*
 
 # =====================
 # Misc
@@ -81,4 +70,6 @@ mlruns/
 
 data/external/*
 data/interim/*
-data/raw/*
+
+debug_tests.py
+sandra.md
