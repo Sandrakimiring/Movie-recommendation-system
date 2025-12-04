@@ -85,6 +85,12 @@ Project Organization
    docker run -p 8000:8000 movie-recs
    ```
 
+### Azure Deployment
+Deploy to Azure Container Web App using GitHub Actions:
+- **Quick Start**: See [Deployment Checklist](docs/DEPLOYMENT_CHECKLIST.md)
+- **Full Guide**: See [Azure Deployment Documentation](docs/AZURE_DEPLOYMENT.md)
+- **Workflow**: `.github/workflows/azure-container-webapp.yml`
+
 ## Key Files Explained
 
 - **`main.py`**: The entry point of the application. It starts the Uvicorn server which hosts the FastAPI app.
