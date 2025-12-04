@@ -40,8 +40,7 @@ Thumbs.db
 # =====================
 # Git LFS / Large Files
 # =====================
-*.pkl
-*.joblib
+
 *.h5
 *.ckpt
 

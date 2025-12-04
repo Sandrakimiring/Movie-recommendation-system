@@ -1,5 +1,6 @@
 fastapi
-uvicorn
+uvicorn[standard]
+gunicorn
 numpy
 pandas
 scikit-learn
@@ -12,3 +13,5 @@ python-multipart
 requests
 pytest
 httpx
+
+ 
