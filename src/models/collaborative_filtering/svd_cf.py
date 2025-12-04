@@ -53,7 +53,15 @@ def save_model(model, trainset, model_name='svd_model.pkl'):
 
     joblib.dump(user_map, MODEL_DIR / 'user_embeddings.pkl')
     joblib.dump(item_map, MODEL_DIR / 'movie_embeddings.pkl')
-    logging.info("User and movie embeddings saved.")
+    
+    # Save index mappings
+    user2idx = {trainset.to_raw_uid(i): i for i in range(trainset.n_users)}
+    movie2idx = {trainset.to_raw_iid(i): i for i in range(trainset.n_items)}
+    
+    joblib.dump(user2idx, MODEL_DIR / 'user2idx.pkl')
+    joblib.dump(movie2idx, MODEL_DIR / 'movie2idx.pkl')
+    
+    logging.info("User and movie embeddings and index mappings saved.")
 
 if __name__ == "__main__":
     try:
@@ -63,4 +71,4 @@ if __name__ == "__main__":
         logging.info("SVD Collaborative Filtering model training and saving completed successfully.")
     except Exception as e:
         logging.error(f"Error occurred: {e}")
-        raise e 
+        raise e
