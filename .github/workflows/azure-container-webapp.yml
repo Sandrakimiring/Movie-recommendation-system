@@ -24,7 +24,7 @@ name: Build and deploy a container to an Azure Web App
 env:
   # CONFIGURATION REQUIRED: Update this with your Azure Web App name
   # Example: movie-recs-app, my-movie-system, etc.
-  AZURE_WEBAPP_NAME: your-app-name  # TODO: Replace with your Azure Web App name
+  AZURE_WEBAPP_NAME: movie-recs-app  # TODO: Replace with your actual Azure Web App name
 
 on:
   push:

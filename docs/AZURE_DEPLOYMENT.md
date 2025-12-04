@@ -65,7 +65,7 @@ Before deploying, you need:
    | Name | Value |
    |------|-------|
    | `DOCKER_REGISTRY_SERVER_URL` | `https://ghcr.io` |
-   | `DOCKER_REGISTRY_SERVER_USERNAME` | Your GitHub username (e.g., `Sandrakimiring`) |
+   | `DOCKER_REGISTRY_SERVER_USERNAME` | Your GitHub username (e.g., `your-github-username`) |
    | `DOCKER_REGISTRY_SERVER_PASSWORD` | Your GitHub PAT token from step 4 |
    | `WEBSITES_PORT` | `8000` |
    | `PORT` | `8000` |
